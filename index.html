@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Sau ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:Poppins;
+  background:linear-gradient(135deg,#ffd1dc,#ffe6f2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  overflow:hidden;
+}
+.card{
+  width:90%;
+  max-width:520px;
+  background:white;
+  padding:35px;
+  border-radius:25px;
+  box-shadow:0 25px 60px rgba(0,0,0,0.2);
+  text-align:center;
+  position:relative;
+}
+h1{
+  font-family:'Great Vibes';
+  font-size:50px;
+}
+.fade{
+  opacity:0;
+  transform:translateY(20px);
+  transition:1.2s ease;
+}
+.show{
+  opacity:1;
+  transform:translateY(0);
+}
+img{
+  width:100%;
+  border-radius:20px;
+  margin-top:15px;
+  transition:1s ease;
+}
+button{
+  padding:12px 28px;
+  border:none;
+  border-radius:30px;
+  margin:10px;
+  font-weight:600;
+  cursor:pointer;
+}
+.primary{background:#ff4d88;color:white}
+.secondary{background:#999;color:white}
+#agreement{display:none;margin-top:15px}
+canvas{
+  position:fixed;
+  top:0;left:0;
+  pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<div id="intro" class="fade show">
+<h1>Hello Sau 💌</h1>
+<p>You have 1 new message</p>
+</div>
+
+<div id="memories" class="fade">
+<h1>Our Story ✨</h1>
+<img id="memoryImage" src="goa-ghibli.png">
+<p id="memoryText">🌴 Goa secret trip</p>
+</div>
+
+<div id="question" class="fade">
+<h1>Will you be my Valentine? ❤️</h1>
+<button class="primary" onclick="yes()">YES</button>
+<button class="secondary" id="noBtn" onclick="no()">NO</button>
+<div id="agreement">
+<p><b>By clicking YES you agree to:</b></p>
+Love me forever<br>
+Stay with me forever<br>
+Be my Valentine forever ❤️
+</div>
+</div>
+
+</div>
+
+<canvas id="fireworks"></canvas>
+
+<script>
+
+const intro=document.getElementById("intro");
+const memories=document.getElementById("memories");
+const question=document.getElementById("question");
+
+const images=[
+"goa-ghibli.png",
+"diwali-ghibli.png",
+"hostel-ghibli.png"
+];
+
+const texts=[
+"🌴 Goa secret trip",
+"🪔 Beautiful Diwali together",
+"🎁 Surprise outside hostel"
+];
+
+let current=0;
+
+setTimeout(()=>{
+intro.classList.remove("show");
+setTimeout(()=>{
+intro.style.display="none";
+memories.style.display="block";
+memories.classList.add("show");
+startMemories();
+},1000);
+},3000);
+
+function startMemories(){
+setInterval(()=>{
+current=(current+1)%images.length;
+document.getElementById("memoryImage").src=images[current];
+document.getElementById("memoryText").innerText=texts[current];
+},3000);
+
+setTimeout(()=>{
+memories.classList.remove("show");
+setTimeout(()=>{
+memories.style.display="none";
+question.style.display="block";
+question.classList.add("show");
+},1000);
+},10000);
+}
+
+let noCount=0;
+function no(){
+noCount++;
+const btn=document.getElementById("noBtn");
+btn.style.position="fixed";
+btn.style.left=Math.random()*80+"vw";
+btn.style.top=Math.random()*80+"vh";
+if(noCount==1) alert("Are you sure? 🥺");
+if(noCount==2) alert("Think again Sau 😭");
+if(noCount>=3) alert("It's YES anyway 😌");
+}
+
+function yes(){
+document.getElementById("agreement").style.display="block";
+startFireworks();
+}
+
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+function startFireworks(){
+for(let i=0;i<120;i++){
+particles.push({
+x:canvas.width/2,
+y:canvas.height/2,
+vx:(Math.random()-0.5)*8,
+vy:(Math.random()-0.5)*8,
+life:100
+});
+}
+animate();
+}
+
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+particles.forEach(p=>{
+p.x+=p.vx;
+p.y+=p.vy;
+p.life--;
+ctx.fillStyle="pink";
+ctx.fillRect(p.x,p.y,4,4);
+});
+particles=particles.filter(p=>p.life>0);
+if(particles.length>0) requestAnimationFrame(animate);
+}
+
+</script>
+
+</body>
+</html>
