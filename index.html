@@ -16,50 +16,106 @@ body{
   align-items:center;
   height:100vh;
   overflow:hidden;
+  transition:background 0.6s ease;
 }
+
 .card{
-  width:90%;
-  max-width:520px;
-  background:white;
-  padding:35px;
-  border-radius:25px;
-  box-shadow:0 25px 60px rgba(0,0,0,0.2);
+  width:95%;
+  max-width:900px;
+  background:rgba(255,255,255,0.95);
+  padding:40px;
+  border-radius:30px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.2);
   text-align:center;
-  position:relative;
-}
-h1{
-  font-family:'Great Vibes';
-  font-size:50px;
-}
-.fade{
   opacity:0;
-  transform:translateY(20px);
-  transition:1.2s ease;
+  transform:translateY(30px);
+  transition:1s ease;
 }
-.show{
+
+.card.show{
   opacity:1;
   transform:translateY(0);
 }
-img{
+
+h1{
+  font-family:'Great Vibes';
+  font-size:60px;
+  margin-bottom:10px;
+}
+
+.gallery{
+  display:flex;
+  gap:20px;
+  justify-content:center;
+  margin-top:30px;
+  flex-wrap:wrap;
+}
+
+.memory{
+  width:260px;
+}
+
+.memory img{
   width:100%;
   border-radius:20px;
-  margin-top:15px;
-  transition:1s ease;
+  box-shadow:0 20px 40px rgba(0,0,0,0.2);
+  transition:0.4s;
 }
+
+.memory img:hover{
+  transform:scale(1.05);
+}
+
+.memory p{
+  margin-top:10px;
+  font-size:14px;
+}
+
 button{
-  padding:12px 28px;
+  padding:14px 32px;
   border:none;
-  border-radius:30px;
-  margin:10px;
+  border-radius:40px;
+  margin:15px;
   font-weight:600;
   cursor:pointer;
+  font-size:16px;
+  transition:0.3s;
 }
-.primary{background:#ff4d88;color:white}
-.secondary{background:#999;color:white}
-#agreement{display:none;margin-top:15px}
+
+.primary{
+  background:#ff4d88;
+  color:white;
+  box-shadow:0 15px 35px rgba(255,77,136,0.4);
+}
+
+.secondary{
+  background:#999;
+  color:white;
+}
+
+button:hover{
+  transform:translateY(-3px);
+}
+
+#agreement{
+  display:none;
+  margin-top:20px;
+  font-size:16px;
+  line-height:1.6;
+}
+
+#introScreen{
+  text-align:center;
+}
+
+#mainContent{
+  display:none;
+}
+
 canvas{
   position:fixed;
-  top:0;left:0;
+  top:0;
+  left:0;
   pointer-events:none;
 }
 </style>
@@ -67,29 +123,49 @@ canvas{
 
 <body>
 
-<div class="card">
+<div class="card" id="card">
 
-<div id="intro" class="fade show">
+<div id="introScreen">
 <h1>Hello Sau 💌</h1>
 <p>You have 1 new message</p>
+<button class="primary" onclick="start()">Open</button>
 </div>
 
-<div id="memories" class="fade">
+<div id="mainContent">
+
 <h1>Our Story ✨</h1>
-<img id="memoryImage" src="goa-ghibli.png">
-<p id="memoryText">🌴 Goa secret trip</p>
+
+<div class="gallery">
+
+<div class="memory">
+<img src="goa-ghibli.png">
+<p>🌴 Goa secret trip</p>
 </div>
 
-<div id="question" class="fade">
-<h1>Will you be my Valentine? ❤️</h1>
+<div class="memory">
+<img src="diwali-ghibli.png">
+<p>🪔 Beautiful Diwali together</p>
+</div>
+
+<div class="memory">
+<img src="hostel-ghibli.png">
+<p>🎁 Surprise outside hostel</p>
+</div>
+
+</div>
+
+<h1 style="margin-top:40px;">Will you be my Valentine? ❤️</h1>
+
 <button class="primary" onclick="yes()">YES</button>
-<button class="secondary" id="noBtn" onclick="no()">NO</button>
+<button class="secondary" id="noBtn">NO</button>
+
 <div id="agreement">
-<p><b>By clicking YES you agree to:</b></p>
+<b>By clicking YES you agree to:</b><br>
 Love me forever<br>
 Stay with me forever<br>
 Be my Valentine forever ❤️
 </div>
+
 </div>
 
 </div>
@@ -98,62 +174,25 @@ Be my Valentine forever ❤️
 
 <script>
 
-const intro=document.getElementById("intro");
-const memories=document.getElementById("memories");
-const question=document.getElementById("question");
+const card=document.getElementById("card");
+setTimeout(()=>card.classList.add("show"),200);
 
-const images=[
-"goa-ghibli.png",
-"diwali-ghibli.png",
-"hostel-ghibli.png"
-];
-
-const texts=[
-"🌴 Goa secret trip",
-"🪔 Beautiful Diwali together",
-"🎁 Surprise outside hostel"
-];
-
-let current=0;
-
-setTimeout(()=>{
-intro.classList.remove("show");
-setTimeout(()=>{
-intro.style.display="none";
-memories.style.display="block";
-memories.classList.add("show");
-startMemories();
-},1000);
-},3000);
-
-function startMemories(){
-setInterval(()=>{
-current=(current+1)%images.length;
-document.getElementById("memoryImage").src=images[current];
-document.getElementById("memoryText").innerText=texts[current];
-},3000);
-
-setTimeout(()=>{
-memories.classList.remove("show");
-setTimeout(()=>{
-memories.style.display="none";
-question.style.display="block";
-question.classList.add("show");
-},1000);
-},10000);
+function start(){
+document.getElementById("introScreen").style.display="none";
+document.getElementById("mainContent").style.display="block";
 }
 
-let noCount=0;
-function no(){
-noCount++;
-const btn=document.getElementById("noBtn");
-btn.style.position="fixed";
-btn.style.left=Math.random()*80+"vw";
-btn.style.top=Math.random()*80+"vh";
-if(noCount==1) alert("Are you sure? 🥺");
-if(noCount==2) alert("Think again Sau 😭");
-if(noCount>=3) alert("It's YES anyway 😌");
-}
+const noBtn=document.getElementById("noBtn");
+
+noBtn.addEventListener("mouseover",()=>{
+const x=Math.random()*70;
+const y=Math.random()*70;
+noBtn.style.position="fixed";
+noBtn.style.left=x+"vw";
+noBtn.style.top=y+"vh";
+document.body.style.background=
+`linear-gradient(135deg,hsl(${Math.random()*360},70%,90%),hsl(${Math.random()*360},70%,95%))`;
+});
 
 function yes(){
 document.getElementById("agreement").style.display="block";
@@ -166,14 +205,15 @@ canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
 
 let particles=[];
+
 function startFireworks(){
-for(let i=0;i<120;i++){
+for(let i=0;i<150;i++){
 particles.push({
 x:canvas.width/2,
 y:canvas.height/2,
-vx:(Math.random()-0.5)*8,
-vy:(Math.random()-0.5)*8,
-life:100
+vx:(Math.random()-0.5)*10,
+vy:(Math.random()-0.5)*10,
+life:120
 });
 }
 animate();
@@ -185,7 +225,7 @@ particles.forEach(p=>{
 p.x+=p.vx;
 p.y+=p.vy;
 p.life--;
-ctx.fillStyle="pink";
+ctx.fillStyle="hotpink";
 ctx.fillRect(p.x,p.y,4,4);
 });
 particles=particles.filter(p=>p.life>0);
